@@ -1,3 +1,5 @@
+import { RegisterForm } from "../../features/auth/components/RegisterForm";
+
 export const App = () => {
-  return <h1>Test</h1>;
+  return <RegisterForm />;
 };
