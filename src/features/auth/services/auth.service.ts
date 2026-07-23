@@ -1,12 +1,12 @@
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 import { auth } from "../../../lib/firebase/auth";
-import { createUserProfile } from "../../profile/services/user.service";
-
-interface RegisterData {
-  email: string;
-  password: string;
-  name: string;
-}
+import type { LoginData, RegisterData } from "../../../types/auth";
+import { createUserProfile } from "../../users/services/user.service";
 
 export const registerUser = async ({ email, password, name }: RegisterData) => {
   const credential = await createUserWithEmailAndPassword(
@@ -17,11 +17,21 @@ export const registerUser = async ({ email, password, name }: RegisterData) => {
 
   await updateProfile(credential.user, { displayName: name });
 
-  await createUserProfile({
+  const profile = await createUserProfile({
     uid: credential.user.uid,
-    email: credential.user.email,
+    email,
     name,
   });
 
+  return profile;
+};
+
+export const loginUser = async ({ email, password }: LoginData) => {
+  const credential = await signInWithEmailAndPassword(auth, email, password);
+
   return credential.user;
+};
+
+export const logoutUser = async () => {
+  await signOut(auth);
 };

@@ -4,9 +4,11 @@ import {
   registerSchema,
   type RegisterSchema,
 } from "../schemas/register.schema";
-import { registerUser } from "../services/auth.service";
+import { useAuth } from "../../../shared/hooks/useAuth";
 
 export function RegisterForm() {
+  const { register: registerAuth } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -16,7 +18,7 @@ export function RegisterForm() {
   });
 
   const onSubmit = async (data: RegisterSchema) => {
-    await registerUser(data);
+    await registerAuth(data);
   };
 
   return (
