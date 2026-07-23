@@ -6,6 +6,8 @@ import {
 } from "../schemas/register.schema";
 import { useAuth } from "../../../shared/hooks/useAuth";
 
+import css from "../styles/RegisterForm.module.css";
+
 export function RegisterForm() {
   const { register: registerAuth } = useAuth();
 
@@ -22,30 +24,45 @@ export function RegisterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        placeholder="Name"
-        {...register("name")}
-      />
+    <div className="container">
+      <div className={css.title}>
+        <h1>Create account</h1>
+        <p>Start tracking your finances</p>
+      </div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={css.form}
+      >
+        <label>
+          Name
+          <input
+            placeholder="Your name"
+            {...register("name")}
+          />
+          <p>{errors.name?.message}</p>
+        </label>
 
-      <p>{errors.name?.message}</p>
+        <label>
+          Email
+          <input
+            placeholder="you@example.com"
+            {...register("email")}
+          />
+          <p>{errors.email?.message}</p>
+        </label>
 
-      <input
-        placeholder="Email"
-        {...register("email")}
-      />
+        <label>
+          Password
+          <input
+            type="password"
+            placeholder="Minimum 8 characters"
+            {...register("password")}
+          />
+          <p>{errors.password?.message}</p>
+        </label>
 
-      <p>{errors.email?.message}</p>
-
-      <input
-        type="password"
-        placeholder="Password"
-        {...register("password")}
-      />
-
-      <p>{errors.password?.message}</p>
-
-      <button>Register</button>
-    </form>
+        <button className={css.button}>Register</button>
+      </form>
+    </div>
   );
 }

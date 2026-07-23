@@ -1,9 +1,10 @@
 import { RegisterForm } from "../../features/auth/components/RegisterForm";
+import { Logo } from "../../shared/components/Logo/Logo";
 
 export const RegisterPage = () => {
   return (
     <>
-      <h1>Register Page</h1>
+      <Logo />
       <RegisterForm />
     </>
   );
