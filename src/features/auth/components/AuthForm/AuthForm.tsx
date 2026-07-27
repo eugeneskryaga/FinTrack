@@ -6,8 +6,16 @@ import {
   type UseFormSetError,
 } from "react-hook-form";
 import { Link } from "react-router-dom";
+import {
+  AiOutlineUser,
+  AiFillMail,
+  AiFillLock,
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+} from "react-icons/ai";
 
 import css from "./AuthForm.module.css";
+import { useState } from "react";
 
 interface AuthFormProps<T extends FieldValues> {
   title: string;
@@ -32,6 +40,8 @@ export function AuthForm<T extends FieldValues>({
   resolver,
   onSubmit,
 }: AuthFormProps<T>) {
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -40,6 +50,10 @@ export function AuthForm<T extends FieldValues>({
   } = useForm<T>({
     resolver,
   });
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(prev => !prev);
+  };
 
   return (
     <>
@@ -59,6 +73,7 @@ export function AuthForm<T extends FieldValues>({
               placeholder="Your name"
               {...register("name" as Path<T>)}
             />
+            <AiOutlineUser className={css.icon} />
             <p className={css.error}>{errors.name?.message as string}</p>
           </label>
         )}
@@ -69,16 +84,29 @@ export function AuthForm<T extends FieldValues>({
             placeholder="you@example.com"
             {...register("email" as Path<T>)}
           />
+          <AiFillMail className={css.icon} />
           <p className={css.error}>{errors.email?.message as string}</p>
         </label>
 
         <label>
           Password
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Minimum 8 characters"
             {...register("password" as Path<T>)}
           />
+          <AiFillLock className={css.icon} />
+          {showPassword ? (
+            <AiOutlineEye
+              className={`${css.icon} ${css.show_icon}`}
+              onClick={togglePasswordVisibility}
+            />
+          ) : (
+            <AiOutlineEyeInvisible
+              className={`${css.icon} ${css.show_icon}`}
+              onClick={togglePasswordVisibility}
+            />
+          )}
           <p className={css.error}>{errors.password?.message as string}</p>
         </label>
         {errors.root && (
