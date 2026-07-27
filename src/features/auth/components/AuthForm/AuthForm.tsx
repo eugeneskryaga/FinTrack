@@ -3,6 +3,7 @@ import {
   type FieldValues,
   type Path,
   type Resolver,
+  type UseFormSetError,
 } from "react-hook-form";
 import { Link } from "react-router-dom";
 
@@ -11,18 +12,13 @@ import css from "./AuthForm.module.css";
 interface AuthFormProps<T extends FieldValues> {
   title: string;
   subtitle: string;
-
   buttonText: string;
-
   redirectText: string;
   redirectLinkText: string;
   redirectTo: string;
-
   showNameField?: boolean;
-
   resolver: Resolver<T>;
-
-  onSubmit: (data: T) => Promise<void>;
+  onSubmit: (data: T, setError: UseFormSetError<T>) => Promise<void>;
 }
 
 export function AuthForm<T extends FieldValues>({
@@ -39,6 +35,7 @@ export function AuthForm<T extends FieldValues>({
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<T>({
     resolver,
@@ -52,7 +49,7 @@ export function AuthForm<T extends FieldValues>({
       </div>
 
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(data => onSubmit(data, setError))}
         className={css.form}
       >
         {showNameField && (
@@ -84,10 +81,13 @@ export function AuthForm<T extends FieldValues>({
           />
           <p className={css.error}>{errors.password?.message as string}</p>
         </label>
-
+        {errors.root && (
+          <p className={`${css.error} ${css.root_error}`}>
+            {errors.root.message as string}
+          </p>
+        )}
         <button className={css.button}>{buttonText}</button>
       </form>
-
       <div className={css.redirect}>
         <p>{redirectText}</p>
 

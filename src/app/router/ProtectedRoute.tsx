@@ -16,7 +16,7 @@ export const ProtectedRoute = ({ children }: Props) => {
   if (!user) {
     return (
       <Navigate
-        to="/register"
+        to="/login"
         replace
       />
     );
