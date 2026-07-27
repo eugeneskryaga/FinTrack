@@ -46,7 +46,7 @@ export function AuthForm<T extends FieldValues>({
     register,
     handleSubmit,
     setError,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<T>({
     resolver,
   });
@@ -114,7 +114,12 @@ export function AuthForm<T extends FieldValues>({
             {errors.root.message as string}
           </p>
         )}
-        <button className={css.button}>{buttonText}</button>
+        <button
+          className={css.button}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Submitting.." : buttonText}
+        </button>
       </form>
       <div className={css.redirect}>
         <p>{redirectText}</p>
