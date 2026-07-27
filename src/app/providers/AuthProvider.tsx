@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         if (!firebaseUser) {
           setUser(null);
+          setIsLoading(false);
           return;
         }
 
@@ -47,14 +48,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const register = async (data: RegisterData) => {
-    await registerUser(data);
+    const profile = await registerUser(data);
+    setUser(profile);
   };
 
   const login = async (email: string, password: string) => {
-    await loginUser({
+    const firebaseUser = await loginUser({
       email,
       password,
     });
+
+    if (!firebaseUser) {
+      throw new Error("Login failed");
+    }
+
+    const profile = await getUserProfile(firebaseUser.uid);
+    setUser(profile);
   };
 
   const logout = async () => {

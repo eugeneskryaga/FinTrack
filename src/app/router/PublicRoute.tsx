@@ -22,5 +22,5 @@ export const PublicRoute = ({ children }: Props) => {
     );
   }
 
-  return <>{children}</>;
+  return children;
 };

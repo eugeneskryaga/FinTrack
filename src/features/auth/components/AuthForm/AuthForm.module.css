@@ -1,0 +1,50 @@
+.title {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.title h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.title p {
+    color: lightgray;
+    font-size: 16px;
+}
+
+.form label {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.error {
+    color: #f87171;
+    font-size: 14px;
+}
+
+.button {
+    margin: 0 auto;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.redirect {
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+}
+
+.redirect p {
+    color: lightgray;
+    margin-right: 10px;
+}
+
+.redirect_link {
+    text-decoration: none;
+    font-weight: bold;
+    color: lightgreen;
+}
