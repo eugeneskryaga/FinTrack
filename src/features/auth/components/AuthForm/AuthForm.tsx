@@ -118,7 +118,7 @@ export function AuthForm<T extends FieldValues>({
           className={css.button}
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Submitting.." : buttonText}
+          {isSubmitting ? "Loading ..." : buttonText}
         </button>
       </form>
       <div className={css.redirect}>
