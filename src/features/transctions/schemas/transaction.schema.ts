@@ -2,11 +2,20 @@ import { z } from "zod";
 
 export const transactionSchema = z.object({
   type: z.enum(["income", "expense"]),
-  category: z.string().min(1, "Choose category"),
-  amount: z.coerce.number().positive("Amount must be greater than 0"),
-  note: z.string().max(100, "Maximum 100 characters").optional(),
+
   date: z.string(),
+
+  amount: z
+    .number({
+      message: "Amount is required",
+    })
+    .positive("Amount must be greater than zero"),
+
+  note: z.string().min(2, "Note must contain at least 2 characters"),
+
+  category: z.string({
+    message: "Choose category",
+  }),
 });
 
-export type TransactionFormInput = z.input<typeof transactionSchema>;
-export type TransactionFormData = z.output<typeof transactionSchema>;
+export type TransactionFormData = z.infer<typeof transactionSchema>;
