@@ -1,0 +1,21 @@
+.wrapper {
+    height: 100%;
+    position: relative;
+}
+
+.addBtn {
+    position: absolute;
+    bottom: 20px;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addBtn svg {
+    stroke:#22c55e;
+    stroke-width: 4px;
+}

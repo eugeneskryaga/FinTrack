@@ -1,14 +1,32 @@
+import { useState } from "react";
+import { TransactionForm } from "../../features/transctions/components/TransactionForm/TransactionForm";
+import { Modal } from "../../shared/components/Modal/Modal";
 import { useAuth } from "../../shared/hooks/useAuth";
+import { HiOutlinePlus } from "react-icons/hi2";
+
+import css from "./Dashboard.module.css";
 
 export const DashboardPage = () => {
-  const { logout } = useAuth();
-  const handleLogout = () => {
-    logout();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user } = useAuth();
+
+  const handleModal = () => {
+    setIsModalOpen(prev => !prev);
   };
+
   return (
-    <>
-      <h1>Dashboard Page</h1>
-      <button onClick={handleLogout}>Logout</button>
-    </>
+    <section className={css.wrapper}>
+      <button
+        onClick={handleModal}
+        className={css.addBtn}
+      >
+        <HiOutlinePlus />
+      </button>
+      {user?.uid && isModalOpen && (
+        <Modal onClose={handleModal}>
+          <TransactionForm uid={user?.uid} />
+        </Modal>
+      )}
+    </section>
   );
 };
