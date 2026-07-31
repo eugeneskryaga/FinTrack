@@ -10,6 +10,8 @@ import { transactionSchema } from "../../schemas/transaction.schema";
 
 import { EXPENSE_CATEGORIES } from "../../constants/expense-categories";
 import { INCOME_CATEGORIES } from "../../constants/income-categories";
+import { useAuth } from "../../../../shared/hooks/useAuth";
+import { useCreateTransaction } from "../../hooks/useCreateTransaction";
 
 export const TransactionForm = () => {
   const {
@@ -17,6 +19,7 @@ export const TransactionForm = () => {
     control,
     handleSubmit,
     resetField,
+    reset,
     formState: { errors },
   } = useForm<TransactionFormData>({
     resolver: zodResolver(transactionSchema),
@@ -24,8 +27,14 @@ export const TransactionForm = () => {
     defaultValues: {
       type: "expense",
       date: new Date().toISOString().split("T")[0],
+      amount: 0,
+      note: "",
+      category: undefined,
     },
   });
+
+  const { user } = useAuth();
+  const { mutate, isPending } = useCreateTransaction(user!.uid);
 
   const type = useWatch({
     control,
@@ -47,7 +56,11 @@ export const TransactionForm = () => {
   );
 
   const onSubmit = (data: TransactionFormData) => {
-    console.log(data);
+    mutate(data, {
+      onSuccess: () => {
+        reset();
+      },
+    });
   };
 
   return (
@@ -182,13 +195,14 @@ export const TransactionForm = () => {
 
       <button
         type="submit"
+        disabled={isPending}
         className={`
           ${css.submitBtn}
 
           ${type === "income" ? css.submitIncome : css.submitExpense}
         `}
       >
-        Submit
+        {isPending ? "Saving" : "Submit"}
       </button>
     </form>
   );

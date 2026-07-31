@@ -1,4 +1,4 @@
-import type { TransactionType } from "./transaction-type";
+export type TransactionType = "income" | "expense";
 
 export interface Transaction {
   id: string;
