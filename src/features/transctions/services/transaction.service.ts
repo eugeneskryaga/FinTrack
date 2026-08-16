@@ -17,7 +17,11 @@ export const createTransaction = async (
 ) => {
   const transactionRef = collection(db, "transactions");
 
-  await addDoc(transactionRef, { ...data, uid, createdAt: serverTimestamp() });
+  await addDoc(transactionRef, {
+    ...data,
+    uid,
+    createdAt: serverTimestamp(),
+  });
 };
 
 export const getTransactions = async (uid: string): Promise<Transaction[]> => {
@@ -39,7 +43,7 @@ export const getTransactions = async (uid: string): Promise<Transaction[]> => {
       category: data.category,
       amount: data.amount,
       note: data.note,
-      date: data.date.toDate(),
+      date: new Date(data.date),
       createdAt: data.createdAt.toDate(),
     };
   });

@@ -13,13 +13,16 @@ import { INCOME_CATEGORIES } from "../../constants/income-categories";
 import { useAuth } from "../../../../shared/hooks/useAuth";
 import { useCreateTransaction } from "../../hooks/useCreateTransaction";
 
-export const TransactionForm = () => {
+interface Props {
+  onClose: () => void;
+}
+
+export const TransactionForm = ({ onClose }: Props) => {
   const {
     register,
     control,
     handleSubmit,
     resetField,
-    reset,
     formState: { errors },
   } = useForm<TransactionFormData>({
     resolver: zodResolver(transactionSchema),
@@ -58,7 +61,7 @@ export const TransactionForm = () => {
   const onSubmit = (data: TransactionFormData) => {
     mutate(data, {
       onSuccess: () => {
-        reset();
+        onClose();
       },
     });
   };

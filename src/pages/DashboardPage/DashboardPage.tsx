@@ -4,6 +4,7 @@ import { Modal } from "../../shared/components/Modal/Modal";
 import { HiOutlinePlus } from "react-icons/hi2";
 
 import css from "./Dashboard.module.css";
+import { TransactionsList } from "../../features/transctions/components/TransactionsList/TransactionsList";
 
 export const DashboardPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,9 +21,10 @@ export const DashboardPage = () => {
       >
         <HiOutlinePlus />
       </button>
+      <TransactionsList />
       {isModalOpen && (
         <Modal onClose={handleModal}>
-          <TransactionForm />
+          <TransactionForm onClose={handleModal} />
         </Modal>
       )}
     </section>
