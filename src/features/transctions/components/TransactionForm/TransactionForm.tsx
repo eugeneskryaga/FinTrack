@@ -159,6 +159,7 @@ export const TransactionForm = ({ onClose }: Props) => {
 
           <input
             type="text"
+            maxLength={25}
             placeholder="What was it for?"
             {...register("note")}
           />

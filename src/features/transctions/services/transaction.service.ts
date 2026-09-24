@@ -6,10 +6,13 @@ import {
   where,
   orderBy,
   serverTimestamp,
+  deleteDoc,
+  doc,
 } from "firebase/firestore";
 import { db } from "../../../lib/firebase/firestore";
 import type { Transaction } from "../types/transaction";
 import type { TransactionFormData } from "../schemas/transaction.schema";
+import { capitalize } from "../../../helpers/helpers";
 
 export const createTransaction = async (
   data: TransactionFormData,
@@ -20,8 +23,15 @@ export const createTransaction = async (
   await addDoc(transactionRef, {
     ...data,
     uid,
+    note: capitalize(data.note),
     createdAt: serverTimestamp(),
   });
+};
+
+export const removeTransaction = async (id: string) => {
+  const transactionRef = doc(db, "transactions", id);
+
+  await deleteDoc(transactionRef);
 };
 
 export const getTransactions = async (uid: string): Promise<Transaction[]> => {

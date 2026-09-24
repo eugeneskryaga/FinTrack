@@ -2,22 +2,21 @@ import { useAuth } from "../../../../shared/hooks/useAuth";
 import { EXPENSE_CATEGORIES } from "../../constants/expense-categories";
 import { INCOME_CATEGORIES } from "../../constants/income-categories";
 import { useTransactions } from "../../hooks/useTransactions";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaSpinner } from "react-icons/fa";
 
 import css from "./TransactionsList.module.css";
+import { useRemoveTransaction } from "../../hooks/useRemoveTransaction";
+import { Notification } from "../../../../shared/components/Notification/Notification";
 
 export const TransactionsList = () => {
   const { user } = useAuth();
   const uid = user?.uid || "";
 
-  const { data: transactions, isLoading } = useTransactions(uid);
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  const { data: transactions } = useTransactions(uid);
+  const { mutate, isPending: isDeleting, variables } = useRemoveTransaction();
 
   if (!transactions || transactions.length === 0) {
-    return <p>There is no transactions</p>;
+    return <Notification message="There is no transactions yet" />;
   }
 
   return (
@@ -50,7 +49,7 @@ export const TransactionsList = () => {
                   }
                 />
               )}
-              <div>
+              <div className={css.category}>
                 <p>{category?.label}</p>
                 <p className={css.note}>{transaction.note}</p>
               </div>
@@ -59,10 +58,20 @@ export const TransactionsList = () => {
               <p
                 className={transaction.type === "expense" ? css.red : css.green}
               >
-                {transaction.type === "expense" ? "- " : "+ "}
+                {transaction.type === "expense" ? "-" : "+"}
                 {transaction.amount}
               </p>
-              <FaTrash size={12} />
+              {isDeleting && variables === transaction.id ? (
+                <FaSpinner
+                  size={12}
+                  className={css.spinner}
+                />
+              ) : (
+                <FaTrash
+                  size={12}
+                  onClick={() => mutate(transaction.id)}
+                />
+              )}
             </div>
           </li>
         );
