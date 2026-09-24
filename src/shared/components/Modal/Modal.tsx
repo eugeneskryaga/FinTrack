@@ -15,9 +15,13 @@ export const Modal = ({ children, onClose }: Props) => {
       }
     };
 
+    document.body.classList.add("modal-open");
     document.addEventListener("keydown", handleKeyDown);
 
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.classList.remove("modal-open");
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, [onClose]);
 
   const handleBackDropClick = (e: React.MouseEvent<HTMLDivElement>) => {

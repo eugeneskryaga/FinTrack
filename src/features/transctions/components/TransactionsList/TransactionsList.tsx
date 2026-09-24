@@ -2,6 +2,9 @@ import { useAuth } from "../../../../shared/hooks/useAuth";
 import { EXPENSE_CATEGORIES } from "../../constants/expense-categories";
 import { INCOME_CATEGORIES } from "../../constants/income-categories";
 import { useTransactions } from "../../hooks/useTransactions";
+import { FaTrash } from "react-icons/fa";
+
+import css from "./TransactionsList.module.css";
 
 export const TransactionsList = () => {
   const { user } = useAuth();
@@ -18,7 +21,7 @@ export const TransactionsList = () => {
   }
 
   return (
-    <ul>
+    <ul className={css.list}>
       {transactions.map(transaction => {
         const categories =
           transaction.type === "income"
@@ -30,11 +33,37 @@ export const TransactionsList = () => {
         );
         const Icon = category?.icon;
 
+        const date = transaction.date.toDateString();
+
         return (
-          <li key={transaction.id}>
-            {Icon && <Icon size={24} />}
-            <p>{category?.label}</p>
-            <p>{transaction.amount}</p>
+          <li
+            key={transaction.id}
+            className={css.item}
+          >
+            <p className={css.date}>{date}</p>
+            <div className={css.icon}>
+              {Icon && (
+                <Icon
+                  size={30}
+                  className={
+                    transaction.type === "expense" ? css.red : css.green
+                  }
+                />
+              )}
+              <div>
+                <p>{category?.label}</p>
+                <p className={css.note}>{transaction.note}</p>
+              </div>
+            </div>
+            <div className={css.amount}>
+              <p
+                className={transaction.type === "expense" ? css.red : css.green}
+              >
+                {transaction.type === "expense" ? "- " : "+ "}
+                {transaction.amount}
+              </p>
+              <FaTrash size={12} />
+            </div>
           </li>
         );
       })}

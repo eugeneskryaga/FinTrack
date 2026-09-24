@@ -1,0 +1,69 @@
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    font-size: 18px;
+    padding: 20px 0;
+    height: 70vh;
+    overflow-y: auto;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    background-color: #363636;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.icon {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.icon svg {
+    background-color: white;
+    border-radius: 14px;
+    padding: 4px;
+}
+
+.note {
+    font-size: 14px;
+    color: darkgrey;
+}
+
+.red {
+    color: #f87171;
+    stroke: #f87171;
+}
+
+.green {
+    color: #22c55e;
+    stroke: #22c55e;
+}
+
+.date {
+    position: absolute;
+    top: -24px;
+    left: 10px;
+    font-size: 16px;
+    color: darkgray;
+}
+
+.amount {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.amount svg {
+    fill: darkgray;
+    transition: fill 200ms ease;
+}
+
+.amount svg:hover {
+    fill: white;
+}
