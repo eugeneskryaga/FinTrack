@@ -148,7 +148,7 @@ export const TransactionForm = ({ onClose, transaction }: Props) => {
 
             <input
               type="date"
-              max={new Date().toISOString().split("T")[0]}
+              max={formatDateForInput(new Date())}
               {...register("date")}
             />
 

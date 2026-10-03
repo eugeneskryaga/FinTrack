@@ -4,8 +4,13 @@
     gap: 30px;
     font-size: 18px;
     padding: 20px 0;
-    height: 70vh;
     overflow-y: auto;
+    scrollbar-width: none;
+    height: 100%;
+}
+
+.list::-webkit-scrollbar {
+    display: none;
 }
 
 .item {
@@ -13,9 +18,10 @@
     justify-content: space-between;
     align-items: center;
     max-width: 320px;
+    min-height: 76px;
     position: relative;
     background-color: #363636;
-    padding: 20px;
+    padding: 14px;
     border-radius: 10px;
 }
 
@@ -36,6 +42,10 @@
     max-width: 160px;
 }
 
+.category p {
+    line-height: 1.5;
+}
+
 .note {
     font-size: 14px;
     color: darkgrey;
@@ -53,7 +63,7 @@
 
 .date {
     position: absolute;
-    top: -24px;
+    top: -22px;
     left: 10px;
     font-size: 16px;
     color: darkgray;

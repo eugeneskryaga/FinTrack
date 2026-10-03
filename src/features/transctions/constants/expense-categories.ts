@@ -9,7 +9,7 @@ import {
   LuClapperboard,
   LuGift,
 } from "react-icons/lu";
-import { TbDots } from "react-icons/tb";
+import { TbDots, TbSmoking } from "react-icons/tb";
 
 export const EXPENSE_CATEGORIES: Category[] = [
   {
@@ -17,7 +17,11 @@ export const EXPENSE_CATEGORIES: Category[] = [
     label: "Food",
     icon: LuUtensils,
   },
-
+  {
+    value: "habits",
+    label: "Habits",
+    icon: TbSmoking,
+  },
   {
     value: "transport",
     label: "Transport",
@@ -56,10 +60,9 @@ export const EXPENSE_CATEGORIES: Category[] = [
     label: "Gifts",
     icon: LuGift,
   },
-
-  {
-    value: "other",
-    label: "Other",
-    icon: TbDots,
-  },
+  // {
+  //   value: "other",
+  //   label: "Other",
+  //   icon: TbDots,
+  // },
 ];

@@ -1,13 +1,13 @@
+import { useState } from "react";
+import { FaTrash, FaSpinner, FaPen, FaCheck, FaTimes } from "react-icons/fa";
 import { useAuth } from "../../../../shared/hooks/useAuth";
+import { Notification } from "../../../../shared/components/Notification/Notification";
 import { EXPENSE_CATEGORIES } from "../../constants/expense-categories";
 import { INCOME_CATEGORIES } from "../../constants/income-categories";
 import { useTransactions } from "../../hooks/useTransactions";
-import { FaTrash, FaSpinner, FaPen } from "react-icons/fa";
-
-import css from "./TransactionsList.module.css";
 import { useRemoveTransaction } from "../../hooks/useRemoveTransaction";
-import { Notification } from "../../../../shared/components/Notification/Notification";
 import type { Transaction } from "../../types/transaction";
+import css from "./TransactionsList.module.css";
 
 interface Props {
   onEdit: (transaction: Transaction) => void;
@@ -18,10 +18,15 @@ export const TransactionsList = ({ onEdit }: Props) => {
   const uid = user?.uid || "";
 
   const { data: transactions } = useTransactions(uid);
-  const { mutate, isPending: isDeleting, variables } = useRemoveTransaction();
+  const { mutate, isPending, variables } = useRemoveTransaction();
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
 
   const handleEdit = (transaction: Transaction) => {
     onEdit(transaction);
+  };
+  const handleConfirmDelete = (id: string) => {
+    mutate(id);
+    setConfirmingId(null);
   };
 
   if (!transactions || transactions.length === 0) {
@@ -35,13 +40,13 @@ export const TransactionsList = ({ onEdit }: Props) => {
           transaction.type === "income"
             ? INCOME_CATEGORIES
             : EXPENSE_CATEGORIES;
-
         const category = categories.find(
           category => category.value === transaction.category,
         );
         const Icon = category?.icon;
-
         const date = transaction.date.toDateString();
+        const isConfirming = confirmingId === transaction.id;
+        const isDeleting = isPending && variables === transaction.id;
 
         return (
           <li
@@ -70,21 +75,35 @@ export const TransactionsList = ({ onEdit }: Props) => {
                 {transaction.type === "expense" ? "-" : "+"}
                 {transaction.amount}
               </p>
-              {
+              {!isConfirming && !isDeleting && (
                 <FaPen
                   size={12}
                   onClick={() => handleEdit(transaction)}
                 />
-              }
-              {isDeleting && variables === transaction.id ? (
+              )}
+              {isConfirming ? (
+                <>
+                  <FaCheck
+                    size={12}
+                    onClick={() => handleConfirmDelete(transaction.id)}
+                  />
+                  <FaTimes
+                    size={12}
+                    onClick={() => setConfirmingId(null)}
+                  />
+                </>
+              ) : (
+                !isDeleting && (
+                  <FaTrash
+                    size={12}
+                    onClick={() => setConfirmingId(transaction.id)}
+                  />
+                )
+              )}
+              {isDeleting && (
                 <FaSpinner
                   size={12}
                   className={css.spinner}
-                />
-              ) : (
-                <FaTrash
-                  size={12}
-                  onClick={() => mutate(transaction.id)}
                 />
               )}
             </div>
