@@ -9,7 +9,7 @@ import {
   LuClapperboard,
   LuGift,
 } from "react-icons/lu";
-import { TbDots, TbSmoking } from "react-icons/tb";
+import { TbSmoking } from "react-icons/tb";
 
 export const EXPENSE_CATEGORIES: Category[] = [
   {
