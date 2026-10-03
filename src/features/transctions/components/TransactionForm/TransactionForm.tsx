@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LuTrendingUp, LuTrendingDown } from "react-icons/lu";
@@ -12,32 +12,45 @@ import { EXPENSE_CATEGORIES } from "../../constants/expense-categories";
 import { INCOME_CATEGORIES } from "../../constants/income-categories";
 import { useAuth } from "../../../../shared/hooks/useAuth";
 import { useCreateTransaction } from "../../hooks/useCreateTransaction";
+import { useEditTransaction } from "../../hooks/useEditTransaction";
+import type { Transaction } from "../../types/transaction";
+import { formatDateForInput } from "../../../../helpers/helpers";
 
 interface Props {
   onClose: () => void;
+  transaction?: Transaction | null;
 }
 
-export const TransactionForm = ({ onClose }: Props) => {
+export const TransactionForm = ({ onClose, transaction }: Props) => {
   const {
     register,
     control,
     handleSubmit,
-    resetField,
+    setValue,
     formState: { errors },
   } = useForm<TransactionFormData>({
     resolver: zodResolver(transactionSchema),
 
     defaultValues: {
-      type: "expense",
-      date: new Date().toISOString().split("T")[0],
-      amount: 0,
-      note: "",
-      category: undefined,
+      type: transaction?.type ?? "expense",
+      date: transaction
+        ? formatDateForInput(transaction.date)
+        : formatDateForInput(new Date()),
+      amount: transaction?.amount ?? undefined,
+      note: transaction?.note ?? "",
+      category: transaction?.category ?? "",
     },
   });
 
   const { user } = useAuth();
-  const { mutate, isPending } = useCreateTransaction(user!.uid);
+
+  const { mutate: create, isPending: isCreating } = useCreateTransaction(
+    user!.uid,
+  );
+
+  const { mutate: edit, isPending: isEditing } = useEditTransaction(user!.uid);
+
+  const isPending = isCreating || isEditing;
 
   const type = useWatch({
     control,
@@ -49,21 +62,39 @@ export const TransactionForm = ({ onClose }: Props) => {
     name: "category",
   });
 
-  useEffect(() => {
-    resetField("category");
-  }, [type, resetField]);
-
   const categories = useMemo(
     () => (type === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES),
     [type],
   );
 
-  const onSubmit = (data: TransactionFormData) => {
-    mutate(data, {
-      onSuccess: () => {
-        onClose();
-      },
+  const handleTypeChange = (newType: "income" | "expense") => {
+    setValue("type", newType);
+
+    setValue("category", "", {
+      shouldDirty: true,
     });
+  };
+
+  const onSubmit = (data: TransactionFormData) => {
+    if (transaction) {
+      edit(
+        {
+          id: transaction.id,
+          data,
+        },
+        {
+          onSuccess: () => {
+            onClose();
+          },
+        },
+      );
+    } else {
+      create(data, {
+        onSuccess: () => {
+          onClose();
+        },
+      });
+    }
   };
 
   return (
@@ -77,7 +108,7 @@ export const TransactionForm = ({ onClose }: Props) => {
         }`}
       >
         <div className={css.title_container}>
-          <p>New transaction</p>
+          <p>{transaction ? "Edit transaction" : "New transaction"}</p>
 
           {type === "income" ? <LuTrendingUp /> : <LuTrendingDown />}
         </div>
@@ -87,7 +118,8 @@ export const TransactionForm = ({ onClose }: Props) => {
             <input
               type="radio"
               value="income"
-              {...register("type")}
+              checked={type === "income"}
+              onChange={() => handleTypeChange("income")}
             />
             Income
           </label>
@@ -96,7 +128,8 @@ export const TransactionForm = ({ onClose }: Props) => {
             <input
               type="radio"
               value="expense"
-              {...register("type")}
+              checked={type === "expense"}
+              onChange={() => handleTypeChange("expense")}
             />
             Expense
           </label>
@@ -173,9 +206,7 @@ export const TransactionForm = ({ onClose }: Props) => {
               key={value}
               className={`
                 ${css.categories_item}
-
                 ${type === "income" ? css.categoryIncome : css.categoryExpense}
-
                 ${selectedCategory === value ? css.categoryActive : ""}
               `}
             >
@@ -202,7 +233,6 @@ export const TransactionForm = ({ onClose }: Props) => {
         disabled={isPending}
         className={`
           ${css.submitBtn}
-
           ${type === "income" ? css.submitIncome : css.submitExpense}
         `}
       >

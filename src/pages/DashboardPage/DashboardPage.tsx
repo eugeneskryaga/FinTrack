@@ -5,26 +5,45 @@ import { HiOutlinePlus } from "react-icons/hi2";
 
 import css from "./Dashboard.module.css";
 import { TransactionsList } from "../../features/transctions/components/TransactionsList/TransactionsList";
+import type { Transaction } from "../../features/transctions/types/transaction";
 
 export const DashboardPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTransaction, setEditingTransaction] =
+    useState<Transaction | null>(null);
 
-  const handleModal = () => {
-    setIsModalOpen(prev => !prev);
+  const handleCreate = () => {
+    setEditingTransaction(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (transaction: Transaction) => {
+    setEditingTransaction(transaction);
+    setIsModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+    setEditingTransaction(null);
   };
 
   return (
     <section className={css.wrapper}>
       <button
-        onClick={handleModal}
+        onClick={handleCreate}
         className={css.addBtn}
       >
         <HiOutlinePlus />
       </button>
-      <TransactionsList />
+
+      <TransactionsList onEdit={handleEdit} />
+
       {isModalOpen && (
-        <Modal onClose={handleModal}>
-          <TransactionForm onClose={handleModal} />
+        <Modal onClose={handleClose}>
+          <TransactionForm
+            onClose={handleClose}
+            transaction={editingTransaction ?? undefined}
+          />
         </Modal>
       )}
     </section>

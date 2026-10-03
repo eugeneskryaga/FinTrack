@@ -8,6 +8,7 @@ import {
   serverTimestamp,
   deleteDoc,
   doc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../../../lib/firebase/firestore";
 import type { Transaction } from "../types/transaction";
@@ -32,6 +33,15 @@ export const removeTransaction = async (id: string) => {
   const transactionRef = doc(db, "transactions", id);
 
   await deleteDoc(transactionRef);
+};
+
+export const editTransaction = async (
+  id: string,
+  data: TransactionFormData,
+) => {
+  const transactionRef = doc(db, "transactions", id);
+
+  await updateDoc(transactionRef, data);
 };
 
 export const getTransactions = async (uid: string): Promise<Transaction[]> => {

@@ -2,18 +2,27 @@ import { useAuth } from "../../../../shared/hooks/useAuth";
 import { EXPENSE_CATEGORIES } from "../../constants/expense-categories";
 import { INCOME_CATEGORIES } from "../../constants/income-categories";
 import { useTransactions } from "../../hooks/useTransactions";
-import { FaTrash, FaSpinner } from "react-icons/fa";
+import { FaTrash, FaSpinner, FaPen } from "react-icons/fa";
 
 import css from "./TransactionsList.module.css";
 import { useRemoveTransaction } from "../../hooks/useRemoveTransaction";
 import { Notification } from "../../../../shared/components/Notification/Notification";
+import type { Transaction } from "../../types/transaction";
 
-export const TransactionsList = () => {
+interface Props {
+  onEdit: (transaction: Transaction) => void;
+}
+
+export const TransactionsList = ({ onEdit }: Props) => {
   const { user } = useAuth();
   const uid = user?.uid || "";
 
   const { data: transactions } = useTransactions(uid);
   const { mutate, isPending: isDeleting, variables } = useRemoveTransaction();
+
+  const handleEdit = (transaction: Transaction) => {
+    onEdit(transaction);
+  };
 
   if (!transactions || transactions.length === 0) {
     return <Notification message="There is no transactions yet" />;
@@ -61,6 +70,12 @@ export const TransactionsList = () => {
                 {transaction.type === "expense" ? "-" : "+"}
                 {transaction.amount}
               </p>
+              {
+                <FaPen
+                  size={12}
+                  onClick={() => handleEdit(transaction)}
+                />
+              }
               {isDeleting && variables === transaction.id ? (
                 <FaSpinner
                   size={12}
