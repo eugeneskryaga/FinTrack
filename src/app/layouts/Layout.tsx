@@ -10,12 +10,14 @@ export const Layout = () => {
       <header className={css.header}>
         <Logo />
       </header>
-      <main className={`${css.main} container`}>
-        <Outlet />
-      </main>
-      <footer className={css.footer}>
-        <Navbar />
-      </footer>
+      <div className={css.wrapper}>
+        <main className={css.main}>
+          <Outlet />
+        </main>
+        <aside className={css.aside}>
+          <Navbar />
+        </aside>
+      </div>
     </>
   );
 };

@@ -27,7 +27,7 @@ export const Navbar = () => {
           }
         >
           <HiOutlineChartBar />
-          Statistics
+          Stats
         </NavLink>
         <NavLink
           to="savings"

@@ -4,10 +4,13 @@
     align-items: center;
 }
 
-.main {
-    height: 70vh;
+.wrapper {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
 }
 
-.footer {
+
+.aside {
     height: 10vh;
 }
