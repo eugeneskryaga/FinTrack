@@ -1,0 +1,50 @@
+.controls_container {
+    width: 100%;
+    margin-bottom: 10px;
+    background-color: #363636;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 314px;
+    gap: 10px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.wrapper {
+    display: flex;
+}
+
+.select {
+    background-color: #424242;
+    border: 1px solid #1e1e1e;
+    border-radius: 10px;
+    min-width: 100px;
+    width: 118px;
+    height: 30px;
+}
+
+.date {
+    width: 118px;
+    height: 30px;
+    padding: 0 6px 0 6px;
+    background-color: #424242;
+    border: 1px solid #1e1e1e;
+    color: whitesmoke;
+}
+
+.btn {
+    background-color: #424242;
+    width: fit-content;
+    height: fit-content;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #1e1e1e;
+}
+
+.container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}

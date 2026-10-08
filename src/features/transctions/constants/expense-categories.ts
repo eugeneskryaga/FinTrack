@@ -56,13 +56,8 @@ export const EXPENSE_CATEGORIES: Category[] = [
     icon: LuClapperboard,
   },
   {
-    value: "gifts",
+    value: "expense_gifts",
     label: "Gifts",
     icon: LuGift,
   },
-  // {
-  //   value: "other",
-  //   label: "Other",
-  //   icon: TbDots,
-  // },
 ];

@@ -9,7 +9,7 @@ export const INCOME_CATEGORIES: Category[] = [
     icon: LuWallet,
   },
   {
-    value: "gifts",
+    value: "income_gifts",
     label: "Gifts",
     icon: LuGift,
   },

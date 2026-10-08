@@ -6,6 +6,7 @@ import { HiOutlinePlus } from "react-icons/hi2";
 import css from "./Dashboard.module.css";
 import { TransactionsList } from "../../features/transctions/components/TransactionsList/TransactionsList";
 import type { Transaction } from "../../features/transctions/types/transaction";
+import { TransactionControls } from "../../features/transctions/components/TransactionControls/TransactionControls";
 
 export const DashboardPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,6 +36,8 @@ export const DashboardPage = () => {
       >
         <HiOutlinePlus />
       </button>
+
+      <TransactionControls />
 
       <TransactionsList onEdit={handleEdit} />
 
